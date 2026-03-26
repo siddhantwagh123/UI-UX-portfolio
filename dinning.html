@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dinning - Luxury Hospitality Case Study</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --bg: #08070a;
+            --surface: rgba(255,255,255,0.06);
+            --stroke: rgba(255,255,255,0.12);
+            --text: rgba(255,255,255,0.92);
+            --muted: rgba(255,255,255,0.66);
+            --muted-2: rgba(255,255,255,0.46);
+            --gold: #e8c896;
+            --rose: #f9a88b;
+            --ease: cubic-bezier(0.2, 0, 0, 1);
+            --shadow: rgba(0,0,0,0.62);
+            --font-display: 'Plus Jakarta Sans', sans-serif;
+            --font-sans: 'Inter', sans-serif;
+        }
+
+        * { box-sizing: border-box; }
+        body.dinning-case {
+            margin: 0;
+            color: var(--text);
+            font-family: var(--font-sans);
+            background:
+                radial-gradient(1000px 700px at 22% 12%, rgba(232, 200, 150, 0.18), transparent 58%),
+                radial-gradient(900px 600px at 85% 30%, rgba(249, 168, 139, 0.12), transparent 55%),
+                radial-gradient(1000px 700px at 60% 100%, rgba(255,255,255,0.06), transparent 60%),
+                var(--bg);
+            min-height: 100vh;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body.dinning-case::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background: url("https://grainy-gradients.vercel.app/noise.svg");
+            opacity: 0.05;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        .progress {
+            position: fixed;
+            top: 0; left: 0;
+            height: 3px; width: 0%;
+            background: linear-gradient(90deg, var(--gold), var(--rose));
+            z-index: 2000;
+            transition: width 0.1s linear;
+        }
+
+        .topbar {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 1200;
+            padding: 1.2rem 1.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            background: linear-gradient(to bottom, rgba(8,7,10,0.86), rgba(8,7,10,0.25), transparent);
+        }
+
+        .brand, .pill {
+            text-decoration: none;
+            color: var(--text);
+            border-radius: 999px;
+            border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.06);
+            backdrop-filter: blur(14px);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            transition: transform 0.22s var(--ease), background 0.22s var(--ease), border-color 0.22s var(--ease);
+        }
+
+        .brand { padding: 0.7rem 0.9rem; }
+        .pill {
+            padding: 0.7rem 0.95rem;
+            font-size: 0.75rem;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+        .pill:hover, .brand:hover { transform: translateY(-2px); background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.16); }
+
+        .dot {
+            width: 10px; height: 10px; border-radius: 999px;
+            background: linear-gradient(135deg, var(--gold), var(--rose));
+            box-shadow: 0 0 0 6px rgba(232, 200, 150, 0.12);
+        }
+
+        main { padding-top: 5.8rem; }
+
+        .wrap {
+            width: min(1200px, 100%);
+            margin: 0 auto;
+            padding: 3rem 1.25rem 4.75rem;
+        }
+
+        .hero {
+            display: grid;
+            grid-template-columns: 1.05fr 0.95fr;
+            gap: 2.2rem;
+            align-items: center;
+        }
+        @media (max-width: 980px){ .hero { grid-template-columns: 1fr; } }
+
+        .kicker {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.55rem;
+            font-size: 0.74rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 0.9rem;
+        }
+        .kicker .chip {
+            width: 28px;
+            height: 12px;
+            border-radius: 999px;
+            background: linear-gradient(90deg, var(--gold), var(--rose));
+            box-shadow: 0 12px 30px rgba(232,200,150,0.18);
+        }
+
+        .title {
+            margin: 0 0 1rem;
+            font-family: var(--font-display);
+            font-weight: 900;
+            font-size: clamp(2.6rem, 5vw, 4.6rem);
+            letter-spacing: -0.04em;
+            line-height: 1.03;
+        }
+        .title em { color: var(--gold); font-style: italic; }
+
+        .lede {
+            margin: 0 0 1.7rem;
+            color: var(--muted);
+            line-height: 1.7;
+            font-size: 1.03rem;
+            max-width: 62ch;
+        }
+
+        .meta-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0,1fr));
+            gap: 0.85rem;
+            margin-top: 1.2rem;
+        }
+
+        .meta {
+            border-radius: 16px;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 0.95rem 1.05rem;
+        }
+        .meta .label {
+            color: var(--muted-2);
+            font-size: 0.7rem;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            margin-bottom: 0.35rem;
+        }
+        .meta .value { font-weight: 800; letter-spacing: -0.01em; }
+
+        .shot {
+            border-radius: 24px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.04);
+            box-shadow: 0 40px 120px var(--shadow);
+            position: relative;
+        }
+        .shot img {
+            width: 100%;
+            display: block;
+            transform: scale(1.02);
+            transition: transform 0.85s var(--ease);
+        }
+        .shot:hover img { transform: scale(1.06); }
+
+        .section { margin-top: 3.4rem; }
+        .section h2 {
+            margin: 0;
+            font-family: var(--font-display);
+            font-size: 1.85rem;
+            letter-spacing: -0.03em;
+        }
+        .section p {
+            color: var(--muted);
+            line-height: 1.7;
+            margin-top: 0.6rem;
+            max-width: 86ch;
+        }
+
+        .grid3 {
+            margin-top: 1.2rem;
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0,1fr));
+            gap: 1rem;
+        }
+        @media (max-width: 980px){ .grid3 { grid-template-columns: 1fr; } }
+
+        .problem {
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.05);
+            padding: 1.08rem 1.15rem;
+            transition: transform 0.24s var(--ease), border-color 0.24s var(--ease);
+        }
+        .problem:hover { transform: translateY(-3px); border-color: rgba(255,255,255,0.16); }
+        .problem .t {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-weight: 900;
+            margin-bottom: 0.35rem;
+            letter-spacing: -0.01em;
+        }
+        .problem .t i { width: 18px; height: 18px; color: var(--gold); }
+        .problem .d { margin: 0; color: var(--muted); line-height: 1.65; }
+
+        .gallery {
+            margin-top: 1.2rem;
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 1rem;
+        }
+        .tile {
+            border-radius: 22px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.04);
+            box-shadow: 0 28px 90px rgba(0,0,0,0.45);
+            cursor: zoom-in;
+            transform: translateY(14px);
+            opacity: 0;
+            transition: transform 0.9s var(--ease), opacity 0.9s var(--ease);
+        }
+        .tile.is-visible { transform: translateY(0); opacity: 1; }
+        .tile img { width: 100%; display: block; }
+        .span-7 { grid-column: span 7; }
+        .span-5 { grid-column: span 5; }
+        .span-6 { grid-column: span 6; }
+        @media (max-width: 980px){
+            .span-7, .span-5, .span-6 { grid-column: span 12; }
+        }
+
+        .lightbox {
+            position: fixed;
+            inset: 0;
+            z-index: 5000;
+            display: none;
+            place-items: center;
+            padding: 1.25rem;
+            background: rgba(0,0,0,0.75);
+        }
+        .lightbox.is-open { display: grid; }
+        .lightbox-inner {
+            width: min(1150px, 100%);
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.16);
+            background: rgba(13,11,10,0.88);
+            box-shadow: 0 40px 130px rgba(0,0,0,0.72);
+            position: relative;
+            overflow: hidden;
+        }
+        .lightbox-toolbar {
+            position: sticky;
+            top: 0;
+            z-index: 3;
+            padding: 0.65rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.65rem;
+            background: rgba(20,18,16,0.92);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+        }
+        .toolbar-actions {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .tool-btn {
+            height: 36px;
+            min-width: 36px;
+            padding: 0 0.75rem;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.14);
+            background: rgba(255,255,255,0.06);
+            color: var(--text);
+            font-size: 0.78rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.35rem;
+            cursor: pointer;
+            transition: background 0.2s var(--ease), border-color 0.2s var(--ease), transform 0.2s var(--ease);
+        }
+        .tool-btn:hover { background: rgba(255,255,255,0.09); border-color: rgba(255,255,255,0.18); transform: translateY(-1px); }
+        .zoom-label {
+            color: var(--muted);
+            font-size: 0.78rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+        .lightbox-scroll {
+            max-height: calc(100vh - 150px);
+            overflow: auto;
+            overscroll-behavior: contain;
+            -webkit-overflow-scrolling: touch;
+            background: rgba(0,0,0,0.25);
+        }
+        .lightbox-scroll.fit .lightbox-image {
+            width: 100%;
+            max-width: 100%;
+            height: auto;
+            transform: none;
+            transform-origin: center top;
+        }
+        .lightbox-image {
+            display: block;
+            width: auto;
+            max-width: none;
+            height: auto;
+            transform-origin: top left;
+            transform: scale(var(--zoom, 1));
+        }
+        .close {
+            width: 42px; height: 42px;
+            border-radius: 14px;
+            border: 1px solid rgba(255,255,255,0.14);
+            background: rgba(255,255,255,0.06);
+            color: var(--text);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .footer-note {
+            text-align: center;
+            color: var(--muted-2);
+            font-size: 0.8rem;
+            letter-spacing: 0.08em;
+            padding: 2.2rem 1.25rem 3rem;
+        }
+    </style>
+</head>
+<body class="dinning-case">
+    <div class="progress" id="progress"></div>
+
+    <header class="topbar">
+        <a href="index.html" class="brand" aria-label="Back to home">
+            <span class="dot" aria-hidden="true"></span>
+            <strong style="letter-spacing:-0.02em;">SW / Case Study</strong>
+        </a>
+        <a href="index.html#projects" class="pill"><i data-lucide="x"></i> Close</a>
+    </header>
+
+    <main>
+        <div class="wrap">
+            <section class="hero">
+                <div>
+                    <div class="kicker"><span class="chip" aria-hidden="true"></span> Case study · Dinning</div>
+                    <h1 class="title">Luxury hospitality with <em>quiet confidence</em>.</h1>
+                    <p class="lede">A premium digital experience that blends fine dining and overnight stay booking into one cohesive journey. The system focuses on atmosphere, deliberate hierarchy, and frictionless reservations.</p>
+                    <div class="meta-grid">
+                        <div class="meta"><div class="label">Role</div><div class="value">Lead UI/UX Designer</div></div>
+                        <div class="meta"><div class="label">Type</div><div class="value">Hospitality Product</div></div>
+                        <div class="meta"><div class="label">Timeline</div><div class="value">4 Weeks</div></div>
+                        <div class="meta"><div class="label">Focus</div><div class="value">Story-led booking flow</div></div>
+                    </div>
+                </div>
+                <div class="shot">
+                    <img src="dinning/Home - Luxury Dining & Sleepover.png" alt="Dinning home page interface">
+                </div>
+            </section>
+
+            <section class="section">
+                <h2>Overview</h2>
+                <p>The challenge was to make a high-end hospitality platform feel emotionally rich without compromising clarity. The design uses clean interaction states, immersive imagery, and structured content blocks so users can discover, compare, and commit with confidence.</p>
+            </section>
+
+            <section class="section">
+                <h2>Design Problems Solved</h2>
+                <div class="grid3">
+                    <article class="problem">
+                        <div class="t"><i data-lucide="compass"></i> Discovery friction</div>
+                        <p class="d">Users needed more visual context before selecting a dining and stay combination.</p>
+                    </article>
+                    <article class="problem">
+                        <div class="t"><i data-lucide="calendar-check"></i> Booking complexity</div>
+                        <p class="d">Multi-step booking lacked clear pacing and confidence cues for premium purchase decisions.</p>
+                    </article>
+                    <article class="problem">
+                        <div class="t"><i data-lucide="messages-square"></i> Trust signals</div>
+                        <p class="d">Reviews and concierge contact needed stronger integration to reduce hesitation.</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section">
+                <h2>Solution Screens</h2>
+                <p>The interface system is built around warm editorial contrast and restrained motion. Every major step from curation to inquiry is intentional and easy to scan.</p>
+                <div class="gallery">
+                    <figure class="tile span-7" data-full="dinning/About - Luxury Curation.png">
+                        <img src="dinning/About - Luxury Curation.png" alt="Dinning about and curation screen">
+                    </figure>
+                    <figure class="tile span-5" data-full="dinning/Booking - Immersion & Detail.png">
+                        <img src="dinning/Booking - Immersion & Detail.png" alt="Dinning booking screen">
+                    </figure>
+                    <figure class="tile span-6" data-full="dinning/Reviews - Experience Feedback.png">
+                        <img src="dinning/Reviews - Experience Feedback.png" alt="Dinning reviews screen">
+                    </figure>
+                    <figure class="tile span-6" data-full="dinning/Contact - Curated Inquiry.png">
+                        <img src="dinning/Contact - Curated Inquiry.png" alt="Dinning contact and inquiry screen">
+                    </figure>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <div class="footer-note">2026 — Dinning · Luxury hospitality case study</div>
+
+    <div class="lightbox" id="lightbox" aria-hidden="true">
+        <div class="lightbox-inner" role="dialog" aria-label="Image preview">
+            <div class="lightbox-toolbar">
+                <div class="toolbar-actions">
+                    <button class="tool-btn" id="zoomOut" type="button" aria-label="Zoom out"><i data-lucide="minus"></i></button>
+                    <button class="tool-btn" id="zoomIn" type="button" aria-label="Zoom in"><i data-lucide="plus"></i></button>
+                    <button class="tool-btn" id="fitImage" type="button" aria-label="Fit image to width">Fit</button>
+                </div>
+                <span class="zoom-label" id="zoomValue">100%</span>
+                <button class="close" id="closeLightbox" type="button" aria-label="Close preview"><i data-lucide="x"></i></button>
+            </div>
+            <div class="lightbox-scroll" id="lightboxScroll">
+                <img id="lightboxImg" class="lightbox-image" alt="">
+            </div>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        const progress = document.getElementById('progress');
+        window.addEventListener('scroll', () => {
+            const total = document.documentElement.scrollHeight - window.innerHeight;
+            const val = total > 0 ? (window.scrollY / total) * 100 : 0;
+            progress.style.width = `${val}%`;
+        });
+
+        const tiles = Array.from(document.querySelectorAll('.tile'));
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) entry.target.classList.add('is-visible');
+            });
+        }, { threshold: 0.12, rootMargin: '0px 0px -80px 0px' });
+        tiles.forEach((tile) => observer.observe(tile));
+
+        const lightbox = document.getElementById('lightbox');
+        const lightboxScroll = document.getElementById('lightboxScroll');
+        const lightboxImg = document.getElementById('lightboxImg');
+        const closeLightbox = document.getElementById('closeLightbox');
+        const zoomIn = document.getElementById('zoomIn');
+        const zoomOut = document.getElementById('zoomOut');
+        const fitImage = document.getElementById('fitImage');
+        const zoomValue = document.getElementById('zoomValue');
+        let zoom = 1;
+        let fitMode = false;
+
+        function applyZoom() {
+            if (fitMode) {
+                lightboxScroll.classList.add('fit');
+                zoomValue.textContent = 'FIT';
+                return;
+            }
+            lightboxScroll.classList.remove('fit');
+            lightboxImg.style.setProperty('--zoom', String(zoom));
+            zoomValue.textContent = `${Math.round(zoom * 100)}%`;
+        }
+
+        function setLightbox(open) {
+            lightbox.classList.toggle('is-open', open);
+            lightbox.setAttribute('aria-hidden', open ? 'false' : 'true');
+            if (!open) {
+                lightboxImg.src = '';
+                return;
+            }
+            zoom = 1;
+            fitMode = true;
+            lightboxScroll.scrollTop = 0;
+            lightboxScroll.scrollLeft = 0;
+            applyZoom();
+        }
+
+        tiles.forEach((tile) => {
+            tile.addEventListener('click', () => {
+                const src = tile.getAttribute('data-full');
+                if (!src) return;
+                lightboxImg.src = src;
+                lightboxImg.alt = tile.querySelector('img')?.alt || 'Preview image';
+                setLightbox(true);
+            });
+        });
+
+        zoomIn.addEventListener('click', () => {
+            fitMode = false;
+            zoom = Math.min(zoom + 0.2, 3);
+            applyZoom();
+        });
+        zoomOut.addEventListener('click', () => {
+            fitMode = false;
+            zoom = Math.max(zoom - 0.2, 0.6);
+            applyZoom();
+        });
+        fitImage.addEventListener('click', () => {
+            fitMode = true;
+            zoom = 1;
+            applyZoom();
+            lightboxScroll.scrollTop = 0;
+            lightboxScroll.scrollLeft = 0;
+        });
+
+        closeLightbox.addEventListener('click', () => setLightbox(false));
+        lightbox.addEventListener('click', (e) => {
+            if (e.target === lightbox) setLightbox(false);
+        });
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') setLightbox(false);
+        });
+    </script>
+</body>
+</html>
