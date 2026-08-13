@@ -27,6 +27,9 @@
     --inset-shadow: inset 6px 6px 10px 0 rgba(163, 177, 198, 0.7), 
                     inset -6px -6px 10px 0 rgba(255, 255, 255, 0.8);
 
+    --mouse-tilt-x: 0deg;
+    --mouse-tilt-y: 0deg;
+
     --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
@@ -298,6 +301,8 @@ body.dark-mode .navbar.scrolled {
     align-items: center;
     padding: 120px 2rem 50px;
     overflow: hidden;
+    perspective: 1200px;
+    transform-style: preserve-3d;
 }
 
 .hero-video {
@@ -317,13 +322,15 @@ body.dark-mode .navbar.scrolled {
 
 .astro-gradient-bg {
     position: absolute;
-    inset: 0;
+    inset: -40px;
     z-index: -1;
     overflow: hidden;
-    background: 
-        /* linear-gradient(135deg, rgba(62, 76, 96, 0.8) 0%, rgba(17,24,39,0.8) 100%), */
-        url(As2.jpg) no-repeat center;
+    background: url('hero bg.png') no-repeat center center;
     background-size: cover;
+    will-change: transform;
+    transform-style: preserve-3d;
+    transform: perspective(1000px) rotateX(var(--mouse-tilt-x)) rotateY(var(--mouse-tilt-y)) scale(1.05);
+    transition: transform 0.15s ease-out;
 }
 
 .astro-orb {

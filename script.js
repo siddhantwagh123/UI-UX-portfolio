@@ -64,38 +64,55 @@ reveal();
 // No JS listeners on .neo-button — this ensures native <a> tag navigation
 // (mailto:, external links) works without any interference.
 
-// === Spotlight Mouse-Follow Effect for Hero (User Requested) ===
+// === Spotlight & 3D Tilt Mouse-Follow Effect for Hero ===
 window.addEventListener("DOMContentLoaded", () => {
     const spotlight = document.querySelector('.spotlight');
     const heroSection = document.querySelector('#hero');
-    if (!spotlight || !heroSection) return;
+    const heroBg = document.querySelector('.astro-gradient-bg');
+    if (!heroSection) return;
 
     let spotlightSize = 'transparent 160px, rgba(0, 0, 0, 0.4) 220px)';
 
-    const updateSpotlight = (e) => {
+    const updateMouseEffects = (e) => {
         const rect = heroSection.getBoundingClientRect();
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
         const xPercent = (x / rect.width) * 100;
         const yPercent = (y / rect.height) * 100;
-        spotlight.style.backgroundImage = `radial-gradient(circle at ${xPercent}% ${yPercent}%, ${spotlightSize}`;
+
+        if (spotlight) {
+            spotlight.style.backgroundImage = `radial-gradient(circle at ${xPercent}% ${yPercent}%, ${spotlightSize}`;
+        }
+
+        if (heroBg) {
+            const tiltX = (y / rect.height - 0.5) * 8; // -4deg to +4deg tilt
+            const tiltY = ((x / rect.width - 0.5) * -8); // -4deg to +4deg tilt
+            heroBg.style.setProperty('--mouse-tilt-x', `${tiltX}deg`);
+            heroBg.style.setProperty('--mouse-tilt-y', `${tiltY}deg`);
+        }
     };
 
-    heroSection.addEventListener('mousemove', updateSpotlight);
+    heroSection.addEventListener('mousemove', updateMouseEffects);
 
     heroSection.addEventListener('mousedown', (e) => {
         spotlightSize = 'transparent 130px, rgba(0, 0, 0, 0.6) 170px)';
-        updateSpotlight(e);
+        updateMouseEffects(e);
     });
 
     heroSection.addEventListener('mouseup', (e) => {
         spotlightSize = 'transparent 160px, rgba(0, 0, 0, 0.4) 220px)';
-        updateSpotlight(e);
+        updateMouseEffects(e);
     });
 
     // Smooth transition on mouseleave
     heroSection.addEventListener('mouseleave', () => {
-        spotlight.style.backgroundImage = 'radial-gradient(circle at 50% 50%, transparent 160px, rgba(0, 0, 0, 0.4) 220px)';
+        if (spotlight) {
+            spotlight.style.backgroundImage = 'radial-gradient(circle at 50% 50%, transparent 160px, rgba(0, 0, 0, 0.4) 220px)';
+        }
+        if (heroBg) {
+            heroBg.style.setProperty('--mouse-tilt-x', '0deg');
+            heroBg.style.setProperty('--mouse-tilt-y', '0deg');
+        }
     });
 });
 
